@@ -19,7 +19,7 @@
     <tbody>
       <tr ng-repeat="tag in tags | filter:search ">
         <td>
-          <span ng-bind-html="tag.name"></span>
+          <a ng-bind-html="tag.name" href="tag/{{repositoryUser}}/{{repositoryName}}/{{tag.name}}">{{tag.name}}</a>
         </td>
       </tr>
     </tbody>

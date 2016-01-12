@@ -79,7 +79,7 @@ module.exports = function (grunt) {
       proxies: [
         {
           context: '/v2',
-          host: 'path-to-your-registry-v2',
+          host: 'registry',
           port: 5000,
           https: false,
           xforward: false,
