@@ -110,7 +110,6 @@ angular.module('registry-services', ['ngResource'])
         isArray: true,
         transformResponse: function(data/*, headers*/){
           var res = [];
-          //console.log(data);
           var resp = angular.fromJson(data);
           for (var idx in resp.tags){
             res.push({
@@ -180,8 +179,7 @@ angular.module('registry-services', ['ngResource'])
           res.architecture = resp.architecture;
 
           for (var idx in resp.history){
-            v1Compatibility = undefined;
-            v1Compatibility = angular.fromJson(resp.history[0].v1Compatibility);
+            v1Compatibility = angular.fromJson(resp.history[idx].v1Compatibility);
             
             history.push({
               id : v1Compatibility.id,
@@ -201,21 +199,25 @@ angular.module('registry-services', ['ngResource'])
           res.parent = history[0].parent;
           res.author = history[0].author;
           res.labels = history[0].labels;
-
+          res.fsLayers = resp.fsLayers;
           return res;
         },
       }
+    });
+  }])
+  // This is not totally working right now (problem with big layers)
+  .factory('Blob', ['$resource', function($resource){
+    return $resource('/v2/:repoUser/:repoName/blobs/:digest', {}, {
 
-      // ,
-      // 'size': {
-      //   url: '/v1/repositories/:repoUser/:repoName/tags/:tagName',
-      //   method: 'GET',
-      //   transformResponse: function(data/*, headers*/){
-      //     // data will be the image ID if successful or an error object.
-      //     data = angular.isString(angular.fromJson(data));
-      //     return data;
-      //   } 
-      // }
+      'query': {
+        method:'HEAD',
+        isArray: false,
+        transformResponse: function(data, headers){
+          var res = {contentLength: parseInt(headers('content-length'))};
+          return res;
+        }
+      }
+
     });
   }])
   .factory('Image', ['$resource', function($resource){
