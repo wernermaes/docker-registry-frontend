@@ -170,7 +170,7 @@ angular.module('registry-services', ['ngResource'])
       'query': {
         method:'GET',
         isArray: false,
-        transformResponse: function(data/*, headers*/){
+        transformResponse: function(data, headers){
           var res = {};
           var history = [];
           var tmp;
@@ -203,6 +203,7 @@ angular.module('registry-services', ['ngResource'])
             res.history = history;
           }
           res.fsLayers = resp.fsLayers;
+          res.digest = headers('docker-content-digest');
           res.architecture = resp.architecture;
           return res;
         },
