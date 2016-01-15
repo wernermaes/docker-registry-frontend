@@ -8,8 +8,8 @@
  * Controller of the docker-registry-frontend
  */
 angular.module('tag-controller', ['registry-services'])
-  .controller('TagController', ['$scope', '$route', '$routeParams', '$location', '$log', '$filter', 'Blob', 'Manifest', 'Tag', 'filterFilter', '$modal',
-  function($scope, $route, $routeParams, $location, $log, $filter, Blob, Manifest, Tag, filterFilter, $modal){
+  .controller('TagController', ['$scope', '$route', '$routeParams', '$location', '$log', '$filter', 'Manifest', 'Tag', 'filterFilter', '$modal',
+  function($scope, $route, $routeParams, $location, $log, $filter, Manifest, Tag, filterFilter, $modal){
 
     $scope.$route = $route;
     $scope.$location = $location;
@@ -20,7 +20,6 @@ angular.module('tag-controller', ['registry-services'])
     $scope.repositoryName = $route.current.params.repositoryName;
     $scope.repository = $scope.repositoryUser + '/' + $scope.repositoryName;
     $scope.tagName = $route.current.params.tagName;
-    $scope.tagsDetails = [];
     
      // How to query the tags
     $scope.tags = Tag.query({

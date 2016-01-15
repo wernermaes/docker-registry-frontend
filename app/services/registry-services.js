@@ -173,60 +173,54 @@ angular.module('registry-services', ['ngResource'])
         transformResponse: function(data/*, headers*/){
           var res = {};
           var history = [];
+          var tmp;
           var resp = angular.fromJson(data);
           var v1Compatibility = undefined;
 
-          res.architecture = resp.architecture;
-
           for (var idx in resp.history){
+
             v1Compatibility = angular.fromJson(resp.history[idx].v1Compatibility);
-            
-            history.push({
-              id : v1Compatibility.id,
-              author : v1Compatibility.author,
-              os : v1Compatibility.os,
-              docker_version: v1Compatibility.docker_version,
-              created: v1Compatibility.created,
-              parent: v1Compatibility.parent,
-              labels: v1Compatibility.config.Labels
-            });
+
+            if(v1Compatibility !== undefined){
+              tmp = {
+                id : v1Compatibility.id,
+                os : v1Compatibility.os,
+                docker_version: v1Compatibility.docker_version,
+                created: v1Compatibility.created,
+                parent: v1Compatibility.parent
+              };
+              if(v1Compatibility.author){
+                tmp.author = v1Compatibility.author;
+              }
+              if(v1Compatibility.config.Labels){
+                tmp.labels = v1Compatibility.config.Labels;
+              }
+              history.push(tmp);
+            }
           }
-          res.history = history;
-          res.os = history[0].os;
-          res.created = history[0].created;
-          res.docker_version = history[0].docker_version;
-          res.id = history[0].id;
-          res.parent = history[0].parent;
-          res.author = history[0].author;
-          res.labels = history[0].labels;
+          if(history.length > 0){
+            res = history[0];
+            res.history = history;
+          }
           res.fsLayers = resp.fsLayers;
+          res.architecture = resp.architecture;
           return res;
         },
       }
     });
   }])
   // This is not totally working right now (problem with big layers)
+  /*
   .factory('Blob', ['$resource', function($resource){
     return $resource('/v2/:repoUser/:repoName/blobs/:digest', {}, {
 
       'query': {
         method:'HEAD',
-        isArray: false,
-        transformResponse: function(data, headers){
+        interceptor: function(data, headers){
           var res = {contentLength: parseInt(headers('content-length'))};
           return res;
-        }
+        } 
       }
 
     });
-  }])
-  .factory('Image', ['$resource', function($resource){
-    return $resource('/v1/images/:imageId/json', {}, {
-      'query': { method:'GET', isArray: false},
-    });
-  }])
-  .factory('Ancestry', ['$resource', function($resource){
-    return $resource('/v1/images/:imageId/ancestry', {}, {
-      'query': { method:'GET', isArray: true},
-    });
-  }]);
+  }]) */ ;
