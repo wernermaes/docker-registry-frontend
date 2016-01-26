@@ -81,6 +81,9 @@ fi
 # Enable mod_rewrite
 a2enmod rewrite
 
+# Enable mod_ssl standaard
+a2enmod ssl
+
 # Stop apache first if is still running from the last time the container was run
 service apache2 stop
 

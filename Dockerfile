@@ -71,7 +71,6 @@ RUN apt-get -y update && \
       --no-install-recommends && \
     a2enmod proxy && \
     a2enmod proxy_http && \
-		a2enmod ssl &&  \
     cd $SOURCE_DIR && \
     export GITREF=$(cat .git/HEAD | cut -d" " -f2) && \
     export GITSHA1=$(cat .git/$GITREF) && \
