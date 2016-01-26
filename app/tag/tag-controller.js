@@ -8,8 +8,8 @@
  * Controller of the docker-registry-frontend
  */
 angular.module('tag-controller', ['registry-services'])
-  .controller('TagController', ['$scope', '$route', '$routeParams', '$location', '$log', '$filter', 'Tag', 'filterFilter', '$modal',
-  function($scope, $route, $routeParams, $location, $log, $filter, Tag, filterFilter, $modal){
+  .controller('TagController', ['$scope', '$route', '$routeParams', '$location', '$log', '$filter', 'Manifest', 'Tag', 'filterFilter', '$modal',
+  function($scope, $route, $routeParams, $location, $log, $filter, Manifest, Tag, filterFilter, $modal){
 
     $scope.$route = $route;
     $scope.$location = $location;
@@ -20,11 +20,17 @@ angular.module('tag-controller', ['registry-services'])
     $scope.repositoryName = $route.current.params.repositoryName;
     $scope.repository = $scope.repositoryUser + '/' + $scope.repositoryName;
     $scope.tagName = $route.current.params.tagName;
-
-    // How to query the tags
+    
+     // How to query the tags
     $scope.tags = Tag.query({
       repoUser: $scope.repositoryUser,
       repoName: $scope.repositoryName
+    }, function(result){
+      for (var idx in result){
+        if ( result[idx].hasOwnProperty('name') ) {
+            result[idx].details = Manifest.query({repoUser: $scope.repositoryUser, repoName: $scope.repositoryName, tagName: result[idx].name});
+        }
+      } 
     });
 
     // Copy collection for rendering in a smart-table
