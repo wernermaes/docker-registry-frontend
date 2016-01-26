@@ -1,7 +1,7 @@
 FROM debian:jessie
 MAINTAINER "Konrad Kleine"
 
-LABEL vendor=ICTS KULEUVEN
+LABEL vendor="ICTS KULEUVEN"
 LABEL com.example.release-date="2016-01-25"
 LABEL com.example.maker="werner"
 
