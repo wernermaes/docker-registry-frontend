@@ -63,7 +63,6 @@ RUN apt-get -y update && \
     export DEBIAN_FRONTEND=noninteractive && \
     apt-get -y install \
       apache2 \
-      libapache2-mod-auth-kerb \
       libapache2-mod-proxy-html \
       git \
       nodejs \
@@ -77,18 +76,18 @@ RUN apt-get -y update && \
     export GITSHA1=$(cat .git/$GITREF) && \
     echo "{\"git\": {\"sha1\": \"$GITSHA1\", \"ref\": \"$GITREF\"}}" > $WWW_DIR/app-version.json && \
     cd $SOURCE_DIR && \
-    rm -rf $SOURCE_DIR/.git && \
+    (rm -rf $SOURCE_DIR/.git || true) && \
     git config --global url."https://".insteadOf git:// && \
     cd $SOURCE_DIR && \
     npm install && \
     node_modules/bower/bin/bower install --allow-root && \
     node_modules/grunt-cli/bin/grunt build --allow-root && \
     cp -rf $SOURCE_DIR/dist/* $WWW_DIR && \
-    rm -rf $SOURCE_DIR && \
+    (rm -rf $SOURCE_DIR || true) && \
     apt-get -y --auto-remove purge git nodejs nodejs-legacy npm && \
     apt-get -y autoremove && \
     apt-get -y clean && \
-    rm -rf /var/lib/apt/lists/*
+    (rm -rf /var/lib/apt/lists/* || true)
 
 ############################################################
 # Add and enable the apache site and disable all other sites
