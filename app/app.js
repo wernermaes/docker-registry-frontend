@@ -64,6 +64,10 @@ angular
         templateUrl: 'repository/repository-detail.html',
         controller: 'RepositoryDetailController',
       }).
+      when('/repository/:repositoryUser/:repositoryName/:tagsPage?', {
+        templateUrl: 'repository/repository-detail.html',
+        controller: 'RepositoryDetailController'
+      }).
       when('/repository/:repositoryUser/:repositoryName/tags/:searchName?', {
         templateUrl: 'repository/repository-detail.html',
         controller: 'RepositoryController',

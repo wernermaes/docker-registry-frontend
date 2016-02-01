@@ -22,6 +22,23 @@ angular.module('repository-detail-controller', ['registry-services', 'app-mode-s
 
     $scope.appMode = AppMode.query();
 
+    $scope.maxTagsPage = undefined;
+
+    // Method used to disable next & previous links
+    $scope.getNextHref = function (){
+      if($scope.maxTagsPage > $scope.tagsCurrentPage){
+        var nextPageNumber = $scope.tagsCurrentPage + 1;
+        return '/repository/'+$scope.repository+'/'+ nextPageNumber;
+      }
+      return '#'
+    } 
+    $scope.getPreviousHref = function (){
+      if($scope.tagsCurrentPage > 1){
+        var previousPageNumber = $scope.tagsCurrentPage - 1;
+        return '/repository/'+$scope.repository+'/'+ previousPageNumber;
+      }
+      return '#'
+    }
     // selected repos
     $scope.selectedRepositories = [];
 
