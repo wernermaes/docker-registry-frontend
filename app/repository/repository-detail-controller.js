@@ -20,8 +20,9 @@ angular.module('repository-detail-controller', ['registry-services', 'app-mode-s
     $scope.repositoryName = $route.current.params.repositoryName;
     $scope.repository = $scope.repositoryUser + '/' + $scope.repositoryName;
 
-    $scope.appMode = AppMode.query();
-
+    $scope.appMode = AppMode.query( function (result){
+      $scope.tagsPerPage = result.defaultTagsPerPage
+    });
     $scope.maxTagsPage = undefined;
 
     // Method used to disable next & previous links
