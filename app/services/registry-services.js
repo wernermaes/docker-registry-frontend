@@ -187,12 +187,12 @@ angular.module('registry-services', ['ngResource'])
                 os : v1Compatibility.os,
                 docker_version: v1Compatibility.docker_version,
                 created: v1Compatibility.created,
-                parent: v1Compatibility.parent
+                // parentLayer: v1Compatibility.parent
               };
               if(v1Compatibility.author){
                 tmp.author = v1Compatibility.author;
               }
-              if(v1Compatibility.config.Labels){
+              if(v1Compatibility.config && v1Compatibility.config.Labels){
                 tmp.labels = v1Compatibility.config.Labels;
               }
               history.push(tmp);
