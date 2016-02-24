@@ -15,7 +15,7 @@
         <th ><span class="glyphicon glyphicon-calendar"></span> Created</th>
         <th ><span class="glyphicon glyphicon-user"></span> Author</th>
         <th ><span class="glyphicon glyphicon-eye-open"></span> Docker version</th>
-        <th ><span class="glyphicon glyphicon-arrow-up"></span> Parent's ID</th>
+        <!-- <th ><span class="glyphicon glyphicon-arrow-up"></span> Parent's ID</th> -->
         <!-- <th><span class="glyphicon glyphicon-compressed"></span> Size (MB)</th> -->
       </tr>
       <tr>
@@ -23,7 +23,7 @@
 		  </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="tag in tags | filter:search ">
+      <tr ng-repeat="tag in displayedTags | filter:search ">
         <td>
           <a ng-bind-html="tag.name" href="tag/{{repositoryUser}}/{{repositoryName}}/{{tag.name}}">{{tag.name}}</a>
         </td>
@@ -31,7 +31,7 @@
         <td am-time-ago="tag.details.created"></td>
         <td><span ng-bind-html="tag.details.author | linky"></span></td>
         <td ng-bind-html="tag.details.docker_version"></td>
-        <td><span ng-bind-html="tag.details.parent | limitTo: 12"></span></td>
+        <!-- <td><span ng-bind-html="tag.details.parent | limitTo: 12"></span></td> -->
         <!-- <td>
           <button type="submit" class="btn btn-info btn-xs" ng-click="calculateTotalImageSize()" ng-show="totalImageSize===null" title="Calculate total image size">
             <span class="glyphicon glyphicon-stats"></span>
@@ -44,4 +44,5 @@
       </tr>
     </tbody>
   </table>
+
 </div>

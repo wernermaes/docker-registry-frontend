@@ -20,22 +20,42 @@ angular.module('tag-controller', ['registry-services'])
     $scope.repositoryName = $route.current.params.repositoryName;
     $scope.repository = $scope.repositoryUser + '/' + $scope.repositoryName;
     $scope.tagName = $route.current.params.tagName;
-    
-     // How to query the tags
-    $scope.tags = Tag.query({
-      repoUser: $scope.repositoryUser,
-      repoName: $scope.repositoryName
-    }, function(result){
-      for (var idx in result){
-        if ( result[idx].hasOwnProperty('name') ) {
-            result[idx].details = Manifest.query({repoUser: $scope.repositoryUser, repoName: $scope.repositoryName, tagName: result[idx].name});
-        }
+    // We wait to retrieve tagsPerPage value
+    $scope.$watch( "tagsPerPage" , function(newVal,oldVal){ 
+      if(newVal){
+        // How to query the tags
+        $scope.tags = Tag.query({
+          repoUser: $scope.repositoryUser,
+          repoName: $scope.repositoryName
+        }, function(result){
+          // Determine the number of pages
+          $scope.maxTagsPage = parseInt(Math.ceil(parseFloat(result.length)/parseFloat($scope.tagsPerPage)));
+          // Compute the right current page number
+          $scope.tagsCurrentPage = $route.current.params.tagsPage;
+          if(! $scope.tagsCurrentPage){
+            $scope.tagsCurrentPage = 1;
+          }else{
+            $scope.tagsCurrentPage = parseInt($scope.tagsCurrentPage) 
+            if($scope.tagsCurrentPage > $scope.maxTagsPage || $scope.tagsCurrentPage < 1){
+              $scope.tagsCurrentPage = 1; 
+            }
+          }
+          // Display only some results and query details 
+          $scope.displayedTags = $scope.tags.slice(($scope.tagsCurrentPage - 1) * $scope.tagsPerPage , ($scope.tagsCurrentPage ) * $scope.tagsPerPage );
+          for (var idx in $scope.displayedTags){
+            if ( result[idx].hasOwnProperty('name') ) {
+                result[idx].details = Manifest.query({repoUser: $scope.repositoryUser, repoName: $scope.repositoryName, tagName: result[idx].name});
+            }
+          }
+        });
       } 
-    });
+    },true);
 
+    
     // Copy collection for rendering in a smart-table
     $scope.displayedTags = [].concat($scope.tags);
 
+    
     // selected tags
     $scope.selection = [];
 
@@ -43,13 +63,6 @@ angular.module('tag-controller', ['registry-services'])
     $scope.selectedTags = function selectedTags() {
       return filterFilter($scope.displayedTags, { selected: true });
     };
-
-    // watch fruits for changes
-    $scope.$watch('tags|filter:{selected:true}', function(nv) {
-      $scope.selection = nv.map(function (tag) {
-        return $scope.repository + ':' + tag.name;
-      });
-    }, true);
 
     $scope.openConfirmTagDeletionDialog = function(size) {
       var modalInstance = $modal.open({
